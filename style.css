@@ -1,0 +1,143 @@
+body {
+    background: #e0e0e0;
+    font-family: sans-serif, verdana;
+    margin: auto;
+    width: 90%;
+}
+div.header {
+    margin-bottom: 1em;
+    background: #2020a0;
+    padding-top: 1.0em;
+    padding-bottom: 1.0em;
+    color: #f8f8f8;
+}
+div.footer {
+    color: #555555;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+div.header h1 {
+    text-align: left;
+    padding-left: 3.0em;
+    font-size: 20px;
+}
+div.header h2 {
+    line-height: 18px;
+}
+div.header h2, div.footer h2 {
+    text-align: right;
+    padding-right: 3.0em;
+    font-size: 13px;
+}
+a:link, a:visited, a:hover
+{
+    padding: 2px;
+    text-decoration: none;
+}
+table.photos a:hover
+{
+    background: inherit;
+}
+div.header a:link,
+div.header a:visited,
+div.header a:hover
+{
+    padding: 2px;
+}
+
+div.header a:link,
+div.header a:visited
+{
+    color: #ffffff;
+}
+div.header a:hover
+{
+    background-color: #c0c0e0;
+}
+div.footer h2
+{
+    margin-bottom: 0em;
+    line-height: 13px;
+}
+div.footer p.licence,
+div.footer p.licence a:link,
+div.footer p.licence a:visited
+{
+    padding-right: 3.9em;
+    color: #555555;
+    font-size: 10px;
+    line-height: 12px;
+    text-align: right;
+}
+p.zip-licence,
+p.zip-licence a:link,
+p.zip-licence a:visited
+{
+    color: #555555;
+    font-size: 10px;
+    line-height: 12px;
+}
+span.author a:link,
+span.author a:visited
+{
+    padding: 2px;
+    color: #000000;
+}
+div.footer p.licence a:link,
+div.footer p.licence a:visited
+{
+    padding-right: 0em;
+}
+a:hover,
+div.footer p.licence a:hover,
+div.body h4 a:hover
+{
+    background-color: #c0c0e0;
+}
+div.main {
+    width: 62em;
+    margin: auto;
+    margin-bottom: 3em;
+    background: #ffffff;
+    font-size: 13px;
+}
+div.body {
+    padding-bottom: 2em;
+}
+div.body p {
+    color: #282828;
+    width: 90%;
+    margin: auto;
+}
+div.body h4 {
+    width: 90%;
+    margin: auto;
+    font-size: 13px;
+    padding-bottom: 0.75em;
+}
+div.body h4 a {
+    font-weight: bold;
+    color: #000000;
+}
+table.photos {
+    margin: auto;
+    width: 95%;
+}
+table.photos tr td {
+    width: 45%;
+    padding-top: 0.5em;
+    padding-bottom: 1.5em;
+}
+table.photos tr td.l {
+    padding-left: 2.5em;
+    text-align: left;
+}
+table.photos tr td.r {
+    padding-right: 2.5em;
+    text-align: right;
+}
+table.captioned-photo tr td {
+    text-align: center;
+    font-weight: bold;
+    padding-bottom: 0em;
+}
