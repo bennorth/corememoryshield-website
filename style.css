@@ -77,6 +77,10 @@ p.zip-licence a:visited
     font-size: 10px;
     line-height: 12px;
 }
+p.zip-licence
+{
+    text-indent: 2px;
+}
 span.author a:link,
 span.author a:visited
 {
@@ -104,10 +108,15 @@ div.main {
 div.body {
     padding-bottom: 2em;
 }
-div.body p {
+div.body p, div.body ul {
     color: #282828;
     width: 90%;
     margin: auto;
+}
+div.body ul li
+{
+    text-indent: -2px;
+    padding-top: 0.6667em;
 }
 div.body h4 {
     width: 90%;
