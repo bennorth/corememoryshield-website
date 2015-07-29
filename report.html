@@ -1,0 +1,728 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <link rel="stylesheet" href="report.css" type="text/css" media="screen" />
+  <title>Magnetic core memory reborn</title>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+    });
+  </script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+</head>
+<body>
+
+<center>
+<h1 class="title">Magnetic core memory reborn</h1>
+<h3 class="title">Ben North, Oliver Nash</h3>
+<h4 class="title"><a href="report.pdf">[Also available as PDF]</a>
+                  <span style="padding-left: 2em"><a href="index.html">[Home]</a></span></h4>
+  <p class="abstract">We outline the theory of magnetic core memory, and describe the design
+  and fabrication of a core memory Arduino shield.</p>
+</center>
+
+<h3><span class="heading-number">1</span> Introduction</h3>
+
+<h4><span class="heading-number">1.1</span> What is magnetic core memory?</h4>
+<div class="marginnote">Core memory is an old memory technology.</div>
+<p>
+Magnetic core memory was the most widely used form of digital computer
+memory from its birth in the early 1950s until the era of
+integrated-circuit memory began in the early 1970s.  Aside from being
+extremely reliable, magnetic core memory is an appealing technology
+because it is based on a very simple idea.
+<p>
+<div class="marginnote">A <span class="emph">core</span>, a ring of magnetic material, stores one bit by the
+  direction of its magnetisation.</div>
+<p>
+A <span class="emph">magnetic core</span> is a ring of ferrite material.  It can be
+permanently magnetised either clockwise or anti-clockwise about its axis
+just as a vertical bar magnet can be magnetised up or down.  We can then
+turn a magnetic core into a bit of digital memory by letting these two
+magnetisation states correspond to 0 and 1.
+<p>
+<div class="marginnote">It provides non-volatile storage.</div>
+<p>
+The core needs no power to retain its data.  In other words, core memory
+is a form of non-volatile storage like modern hard disk drives, although
+in its day it fulfilled the &lsquo;high-speed&rsquo; role of modern RAM.
+<p>
+With many such cores, large memory modules were made, such as this
+example from a CDC machine of the mid-1960s.  The right-hand image shows
+a close-up of the cores themselves.
+
+<table class="photos">
+<tr><td><img src="vintage-core.jpg" width=286 height=288></td>
+    <td><img src="close-up-8x8-2.jpg" width=276 height=288></td></tr>
+<tr><td><img src="full-size-scale-bar.png" width=286 height=4>
+    <td><img src="close-up-scale-bar.png" width=276 height=4>
+<tr><td>50mm
+    <td>2mm
+</table>
+
+<p>
+<div class="marginnote">Cores were c.1mm across, and ran at c.1MHz.  Core stores
+  had up to 500,000 cores.</div>
+<p>
+As the technology developed <a href="#Hilpert">[1]</a>, the cores shrank from
+c.2mm diameter in the early 1950s to c.0.4mm by the early 1970s.
+Access speeds rose at the same time, from about 200kHz to over 1MHz,
+and core memory modules were manufactured with as many as over half a
+million cores.  Furthermore, as recently as 2004, a magnetic core memory
+system was found still in service in a telephony control system.
+<p>
+<div class="marginnote">It is still an interesting technology today.</div>
+<p>
+Magnetic core memory continues to capture the imaginations of modern
+enthusiasts <a href="#Holder">[2]</a>, <a href="#Holme">[3]</a>, and it is also the origin of the term
+<span class="emph">core dump</span>, to mean an on-disk image of the main memory of a process.
+<p>
+
+<h4><span class="heading-number">1.2</span> What is an Arduino?</h4>
+<center>
+<img src="Arduino-Duemilanove.jpg" width=288 height=201>
+</center>
+<p>
+<div class="marginnote">The Arduino is a popular, easy-to-use, open design
+  microprocessor board with IO capabilities.</div>
+<p>
+The Arduino, whose Duemilanove version is shown
+above <a href="#arduino-photo">[5]</a>, is an open-source physical computing device.
+It has removed many of the hurdles for people wishing to explore
+embedded microprocessing.  An Arduino is a small single-board computer
+based on an Atmel AVR microprocessor, with supporting components to
+handle USB communications and provide easy access to input/output pins.
+The developer programs the on-board microprocessor using an IDE running
+on a PC.  It has proved very popular, with six-figure sales, and has
+been used in projects as diverse as autopilots for radio-controlled
+aeroplanes, and CNC sewing machines.
+<p>
+<div class="marginnote">Add-on <span class="emph">shields</span> exist, providing specialist interfacing or
+  control functions.</div>
+<p>
+Several expansion modules exist, allowing the Arduino to perform a
+greater variety of tasks.  These secondary modules, or <span class="emph">shields</span>,
+are circuit boards that plug into the Arduino&rsquo;s pin headers, and supply
+additional hardware to, for example, drive motors or servos, interface
+with wireless communication modules, or communicate over Ethernet.
+<p>
+
+<h4><span class="heading-number">1.3</span> A core-store shield</h4>
+
+<div class="marginnote">We set ourselves the challenge of creating a core
+  memory Arduino shield.</div>
+<p>
+We had developed an interest in the principles and practice of core
+memory, and the creation of a modern core memory module struck us as an
+appealing challenge.  Eventually a pleasing idea suggested itself:  we
+decided to build a magnetic core memory Arduino shield.
+<p style="clear: both">
+<div class="marginnote">New-old-stock cores; modern components.</div>
+<p>
+Our project was made possible thanks to the existence of a supply of
+surplus ferrite cores manufactured in the 1980s for the magnetic core
+memory systems of the time.  We decided that we would use these old
+cores but permit ourselves to use modern components (transistors,
+integrated-circuit logic gates, etc.).  This made our work enormously
+easier than that of the original core memory inventors and
+manufacturers.  Also, we knew that our end goal was possible.
+<p>
+<div class="marginnote">It worked.</div>
+<p>
+We succeeded in building an extremely reliable 32-bit core memory shield
+for the Arduino.  It can be used as storage for the Arduino, or
+alternatively, any modern computing device with a USB port can now read
+and write to magnetic core memory.
+<p>
+
+<h3><span class="heading-number">2</span> Principles of core memory</h3>
+
+<h4><span class="heading-number">2.1</span> Magnetic hysteresis</h4>
+
+A ferrimagnetic substance has two distinct permanently magnetised
+states.  In our case, these are clockwise and anti-clockwise round the
+cores.  The key to their use as computer memory is their behaviour when
+an external magnetic field is applied &mdash; they exhibit
+<span class="emph">hysteresis</span>.
+<p>
+
+<h4>A weak external field has no effect</h4>
+
+If we apply a weak external magnetic field around a core, and then
+remove it, there is no lasting effect on the core&rsquo;s magnetisation:
+<p>
+<table class="figure">
+  <tr>
+  <td><span class="picexpl">Start off with a core magnetised in the anti-clockwise
+  direction:</span></td>
+  <td><span class="picexpl">Apply a weak clockwise external field.  This reduces the
+  strength of the anti-clockwise magnetism in the core:</span></td>
+  <td><span class="picexpl">But when the external field is removed, the magnetism in
+  the core &lsquo;springs back&rsquo; to its original state:</span></td>
+  </tr>
+  <tr class="pics">
+  <td><img src="core-alone-med-acw-2.png" width=200 height=150></td>
+  <td><img src="core-alone-sml-acw-1.png" width=200 height=150></td>
+  <td><img src="core-alone-med-acw-2.png" width=200 height=150></td>
+  </tr>
+</table>
+A weak anti-clockwise field similarly produces no lasting change.
+<p>
+
+
+<h4>Strong external fields cause the magnetisation to
+  <span class="emph">switch</span></h4>
+
+<p>However, if we apply a sufficiently strong magnetic field in the
+opposite direction, the core will <span class="emph">switch</span>
+from one magnetic state to the other:</p>
+
+<table class="figure">
+  <tr>
+	<td><span class="picexpl">Start off with a core magnetised in the
+    anti-clockwise direction:</span></td>
+    <td><span class="picexpl">Apply a strong clockwise external field. This switches the
+    core&rsquo;s magnetism, and the core now has clockwise magnetism:</span></td>
+    <td><span class="picexpl">When this external field is removed, the magnetism in the
+    core reduces slightly in strength, but remains clockwise:</span></td>
+  </tr>
+  <tr class="pics">
+    <td><img src="core-alone-med-acw-2.png" width=200 height=150></td>
+    <td><img src="core-alone-lrg-cw-2.png" width=200 height=150></td>
+    <td><img src="core-alone-med-cw-2.png" width=200 height=150></td>
+  </tr>
+</table>
+A strong field in the same direction as the core&rsquo;s existing
+magnetisation has no lasting effect &mdash; the core is <span class="emph">saturated</span> and
+can be magnetised no further in that direction.
+<p>
+
+<h4><span class="heading-number">2.2</span> The magnetic field of a current-carrying wire</h4>
+
+<div class="marginnote">Current in a wire creates a magnetic field.</div>
+<p>
+The next essential physical fact is that a DC current in a wire creates
+a magnetic field circulating about the wire, whose strength is
+proportional to the size of the current.  If we reverse the direction of
+the current, the magnetic field circulates in the opposite direction:
+<p>
+<table class="figure">
+  <tr>
+	<td><span class="picexpl">Small current down; weak clockwise field</span></td>
+	<td><span class="picexpl">Large  current down; strong clockwise field</span></td>
+	<td><span class="picexpl">Small current up; weak anti-c/w field</span></td>
+	<td><span class="picexpl">Large current up; strong anti-c/w field</span></td>
+  </tr>
+  <tr class="pics">
+	<td><img src="wire-field-sml-cw-1.png" width=128 height=96></td>
+	<td><img src="wire-field-lrg-cw-1.png" width=128 height=96></td>
+	<td><img src="wire-field-sml-acw-1.png" width=128 height=96></td>
+	<td><img src="wire-field-lrg-acw-1.png" width=128 height=96></td>
+  </tr>
+</table>
+
+
+<h4><span class="heading-number">2.3</span> Writing to a one-bit core memory system</h4>
+
+<div class="marginnote">We can write a bit by driving appropriate currents.</div>
+<p>
+We now know enough to write one bit of core memory.  Having threaded a
+wire through a core, we can cause the core to become magnetised in the
+clockwise direction by passing a strong enough current in one direction
+through the wire, and we can cause the core to become magnetised in the
+anti-clockwise direction by passing a strong enough current in the
+opposite direction.  These two operations correspond to writing 0 and 1
+to the core.  The magnetisation of the core, and so the bit stored,
+remains even after the current stops flowing.
+<p>
+<table class="figure">
+  <tr>
+    <td><span class="picexpl">The core is magnetised anti-clockwise, and therefore
+    holds the bit 1.  No current flows through the wire.</span></td>
+    <td><span class="picexpl">A large current is supplied, generating a strong
+    magnetic field.  This switches the core&rsquo;s magnetisation to
+    clockwise.</span></td>
+    <td><span class="picexpl">When the current is turned off, the core remains
+  	magnetised clockwise, therefore now holding 0.</span></td>
+  </tr>
+  <tr class="pics">
+    <td><img src="acw-ready-to-switch.png" width=200 height=150></td>
+    <td><img src="switch-to-cw-current.png" width=200 height=150></td>
+    <td><img src="switched-to-cw.png" width=200 height=150></td>
+  </tr>
+</table>
+
+
+<h4><span class="heading-number">2.4</span> Reading from a one-bit core memory system</h4>
+
+<div class="marginnote">But: how do we <span class="emph">read</span> the state of the core?</div>
+<p>
+Core memory would probably have been a lot less popular had it been a
+write-only technology.  To see how to read from the core, we need a
+further piece of physics: a changing magnetic field induces a voltage.
+<p>
+<div class="marginnote">When a core switches, it induces a voltage.</div>
+<p>
+Consider a core which is magnetised anti-clockwise.  If we apply current
+which tries to increase this anti-clockwise magnetisation, it does not
+in fact change the magnetic field in the core much &mdash; it is already
+saturated.  If, however, we apply enough current in the opposite
+direction, the core switches to be magnetised clockwise, as shown above.
+This process takes a small amount of time, around 1us for typical
+cores.  During that time, the magnetic field is undergoing a large
+change, and so induces a noticeable voltage.
+<p>
+<div class="marginnote">A second wire senses the induced voltage.</div>
+<p>
+The setup for reading the state of a core then is to have two wires
+passing through the core.  We use one wire, the <span class="emph">drive line</span>, for
+driving current back and forth and so to set the state of the core, and
+we have circuitry connected to the second wire, the <span class="emph">sense line</span>,
+to measure the induced voltages.
+<p>
+<div class="marginnote">To read: write a 0; check if the core switched.  If it did,
+it was a 1.</div>
+<p>
+We start the process of reading the core by <span class="emph">writing</span> a 0 to it
+using the drive line.  If we observe no significant induced voltage on
+the sense line then we learn the core was already in state 0.  If,
+however, we observe a large induced voltage on the sense line then we
+learn that the core contained a 1 (and we then write 1 back to the
+core).  The memory is said to operate with a <span class="emph">destructive read</span>.
+<p>
+<div class="marginnote">We measured the sense signals from our cores.</div>
+<p>
+At this point it may help to make this more concrete by exhibiting some
+real data.  Below we present the results of one of our experiments in
+which we measured the induced voltage on the sense line when writing 0
+to a core which contained 1, and when writing 0 to a core which already
+contained 0.
+<p>
+<table class="figure">
+  <tr>
+    <td><span class="picexpl">If a core switches from one magnetisation direction to the other,
+    the changing magnetic field induces a voltage that peaks at c.35mV,
+    staying above 20mV for c.600ns</span></td>
+    <td><span class="picexpl">However, if the applied field is in the same direction as the
+    core&rsquo;s existing magnetisation, no switching takes places, and we
+    observe a negligible voltage:</span></td>
+  </tr>
+  <tr class="pics">
+    <td><img src="fig_20110505_1.png" width=252 height=72>
+    <td><img src="fig_20110505_2.png" width=252 height=72>
+  </tr>
+</table>
+<p>
+We also see voltage &lsquo;spikes&rsquo; caused by the drive line currents switching
+on and off.  These <span class="emph">transformer-action</span> spikes are significant in
+magnitude but are short and temporally separated from the switching
+signal.  The pulse shown is in fact the base drive of transistors, and
+the turn-on and turn-off delays are visible.
+<p>
+We could now build a one-bit read-write core memory system.
+
+
+<h4><span class="heading-number">2.5</span> Arrays of cores and half-select currents</h4>
+
+<div class="marginnote">Imposing only half the field leaves the core alone.</div>
+<p>
+However, we want to have more than one bit of memory without needing one
+drive line per core.  We make use of a feature of the hysteresis
+behaviour of the core.  We previously talked in terms of &lsquo;weak&rsquo; or
+&lsquo;strong&rsquo; external magnetic fields.  Slightly more quantitatively:  the
+core is <span class="emph">not</span> switched by a field which is half as strong as one
+which is just strong enough to switch the core. The field is
+proportional to the current in the drive line, so if we pass half the
+current required to just switch a core through the drive line, the core
+will not switch state.
+<p>
+<div class="marginnote">A 2-D array gives efficient control of every core.</div>
+<p>
+Now suppose we have $nm$ cores and we arrange them in an $n\times m$
+rectangular array such that each core has one of $n$ horizontal and one
+of $m$ vertical drive lines passing through it.  With this setup we can
+selectively set the $(i, j)$th core and no other by simultaneously
+driving the $i$th vertical drive line and $j$th horizontal drive line in
+the appropriate directions, each with half the current required for
+switching.  For example, in a $4\times4$ array, with the cores viewed
+edge-on, we switch the core shown:
+<p>
+<img src="two-dml-array.png" width=640 height=203 align=left>
+<p>
+<div style="clear:both; padding-top: 0.75em">
+We only need $O(\sqrt{N})$ drive lines for an array of $N$ cores.
+In total, each core will have three wires threaded through it: two
+perpendicular drive lines, and a sense line.  A single sense line can be
+threaded through all cores in an array, a point we return to below.
+</div>
+
+<h4><span class="heading-number">2.6</span> Exploiting anti-coincidence</h4>
+
+<div class="marginnote">One more trick doubles the number of cores we can address.</div>
+<p>
+The picture we should now have in mind of a core memory module is a
+rectangular array of cores, with one vertical and one horizontal drive
+line passing through each core.  There is a further drive-line economy,
+which cuts in half the number of drive lines in one dimension.
+<p>
+<div class="marginnote">Two states out of four do nothing.</div>
+<p>
+Consider a core with its two drive lines.  There are then four
+combinations of current direction.  Two combinations produce a
+reinforcing field round the core, but in the other two, the fields
+cancel round the core:
+<p>
+<table cellpadding=10>
+  <tr>
+    <td><span class="picexpl">Reinforce to write 0:</span></td>
+    <td><span class="picexpl">Reinforce to write 1:</span></td>
+    <td><span class="picexpl">Cancel; no effect:</span></td>
+    <td><span class="picexpl">Cancel; no effect:</span></td>
+  </tr>
+  <tr>
+    <td><img src="intersection-dr.png" width=128 height=64></td>
+    <td><img src="intersection-ul.png" width=128 height=64></td>
+    <td><img src="intersection-ur.png" width=128 height=64></td>
+    <td><img src="intersection-dl.png" width=128 height=64></td>
+  </tr>
+</table>
+<p>
+We say the currents or fields are <span class="emph">coincident</span> if they reinforce, and
+<span class="emph">anti-coincident</span> if they cancel.
+<p>
+<div class="marginnote">We can use those two states.</div>
+<p>
+Now consider two cores arranged as below.  We still have two drive
+lines, but we have turned one of the drive lines through two right
+angles so that it passes through both cores but in opposite directions.
+If we now consider the four possible simultaneous states of the drive
+lines, we find that all possible combinations are put to use:
+<p>
+<table cellpadding=10>
+  <tr>
+    <td><span class="picexpl">Write 0 to left core:</span></td>
+    <td><span class="picexpl">Write 1 to left core:</span></td>
+    <td><span class="picexpl">Write 0 to right core:</span></td>
+    <td><span class="picexpl">Write 1 to right core:</span></td>
+  </tr>
+  <tr>
+    <td><img src="anti-coincidence-l0.png" width=128 height=64></td>
+    <td><img src="anti-coincidence-l1.png" width=128 height=64></td>
+    <td><img src="anti-coincidence-r0.png" width=128 height=64></td>
+    <td><img src="anti-coincidence-r1.png" width=128 height=64></td>
+  </tr>
+</table>
+<p>
+<div class="marginnote">One sense loop snakes through all cores.</div>
+<p>
+To take the concrete example of the small core array we built,
+we show a $8\times4$ array.  We also now illustrate the single sense
+line which runs through all cores.  The alternating alignment of the
+cores makes the threading of the sense loop easier, and also reduces the
+transformer-action spikes.
+<p>
+<img style="padding-bottom: 2.5ex" src="drive_lines_1.png"
+     width=540 height=218 align="left">
+<div style="clear:both">
+<p>
+The array of cores can be thought of as two halves, with each core in
+the left half having an anti-coincident partner in the right half
+sharing the same pair of drive lines.
+</div>
+
+<h3><span class="heading-number">3</span> Our implementation</h3>
+
+To implement these principles, we have to solve a few fairly distinct
+problems.  We must be able to drive current through the drive lines;
+decide which drive lines need to have current driven through them; and
+sense when an induced &lsquo;switching signal&rsquo; occurs.
+
+<h4><span class="heading-number">3.1</span> A current-driving circuit</h4>
+
+<div class="marginnote">The drive circuit is two copies ($X$ and $Y$) of one
+problem: driving one of four lines in either direction.</div>
+<p>
+As noted above, we organise the 32-bit module as a rectangular array
+with 4 rows and 8 columns in which the columns are paired as above using
+anti-coincidence.  As a result, we have 4 vertical and 4 horizontal
+drive lines to control.  Our current-driving problem is thus two
+instances of the same problem: we need to be able to select one of four
+lines, and to specify a direction in which to drive current along that
+line.
+<p>
+<div class="marginnote">Drive the four lines as &lsquo;two by two&rsquo;.</div>
+<p>
+Our current sources and sinks are transistors, and we could accomplish
+our goal by connecting each end of each drive line to the collectors of
+both a PNP and an NPN transistor (i.e., by using four H-bridge
+circuits).  This would work, but would be inefficient in terms of the
+number of transistors used.  By introducing a few diodes, we can use a
+design with half as many transistors.
+<p>
+By turning on the correct transistors in the following circuit, we can
+send current in either direction through any of the drive lines.  The
+resistors $R_1$ and $R_2$ control how much current flows.  We discuss
+their value below.
+<center>
+<img src="drive_line_circuit.png" width=440 height=412>
+</center>
+
+<h4>Calibrating the half-select current</h4>
+
+<div class="marginnote">Experiments determine how much current we should use.</div>
+<p>
+As we have already discussed, it is important that we drive the right
+amount of current.  It must be low enough that the magnetic field
+produced by the current in one drive line is not enough to switch a
+core, but high enough that the combined field from two coincident
+currents does produce switching.  We determined the range of possible
+values of current for our cores empirically and established that any
+value in the range 250&ndash;340mA works.  We set the current by choosing
+appropriate values for the resistors in the drive circuit above.
+
+<h4><span class="heading-number">3.2</span> Addressing</h4>
+
+<div class="marginnote">Which transistors should we turn on?</div>
+<p>
+In the circuit above, we want to know which transistors to turn on to
+drive current left or right in one of the four lines.  We must be able
+to pulse this current, and so we need to be able to stop all drive
+currents.  Let the <span class="emph">enable</span> Boolean variable be $E$.  Let the variable
+$D_X$ give the direction, with $D_X=0$ being leftwards.  In order to
+drive the line $X_{A_1A_2}$ in the direction $D_X$ (as long as $E$ is
+asserted), the base of transistor $Q^P_{11}$, for example, must be taken
+high or low according to
+$$Q^P_{11} = \overline{E \wedge D_X \wedge A_1}.$$
+In words, $Q^P_{11}$ must be on (i.e., its base must be pulled low)
+exactly when we are enabled ($E=1$) and we wish to drive current
+rightwards ($D_X=1$) through either $X_{10}$ or $X_{11}$ (those two
+lines have $A_1=1$).  The formulae for all eight transistors are:
+<p>
+<center>
+<table class="transistor-eqns">
+  <tr>
+    <td>$Q^P_{10} = \overline{E \wedge D_X \wedge \overline{A_1}}$</td>
+    <td>$Q^P_{20} = \overline{E \wedge \overline{D_X} \wedge \overline{A_2}}$</td>
+  </tr>
+  <tr>
+    <td>$Q^N_{10} = E \wedge \overline{D_X} \wedge \overline{A_1}$</td>
+    <td>$Q^N_{20} = E \wedge D_X \wedge \overline{A_2}$</td>
+  </tr>
+  <tr>
+    <td>$Q^P_{11} = \overline{E \wedge D_X \wedge A_1}$</td>
+    <td>$Q^P_{21} = \overline{E \wedge \overline{D_X} \wedge A_2}$</td>
+  </tr>
+  <tr>
+    <td>$Q^N_{11} = E \wedge \overline{D_X} \wedge A_1$</td>
+    <td>$Q^N_{21} = E \wedge D_X \wedge A_2$</td>
+  </tr>
+</table>
+</center>
+
+<h4>Combining the $X$ and $Y$ drive addressing</h4>
+
+<div class="marginnote">Translating from &lsquo;currents in lines&rsquo; to &lsquo;address and data&rsquo;.</div>
+<p>
+Recall that the current-driving circuitry consists of two instances of
+this driving circuit, horizontal and vertical.  We thus have bits $A_1$,
+$A_2$, and $D_X$ for the first instance and $A_3$, $A_4$, and $D_Y$,
+say, for the second.  We can generate a switching field in either
+direction for any of our 32 cores by choosing values for these six bits,
+and then controlling transistor bases accordingly.  Furthermore, looking
+back at section 2.6, we see that the
+tuple $(A_1, A_2, A_3, A_4)$ determines a pair of anti-coincident
+partner cores and that it is the value of $A_0 := D_X \oplus D_Y$ that
+distinguishes between these two partner cores.  Therefore we
+reparameterise our six control bits in terms of the five-bit address
+$A_4A_3A_2A_1A_0$ and the single data bit $D := D_X$.  We then have $D_Y
+= D_X \oplus A_0$.  The 32 cores are now numbered, since each core has a
+unique five-bit address $A_4A_3A_2A_1A_0$.  The layout of these
+addresses in the $8\times 4$ array may appear a little haphazard, but
+this does not matter.
+
+
+<h4><span class="heading-number">3.3</span> Sensing</h4>
+
+<div class="marginnote">How to detect the bulging switching signal?</div>
+<p>
+With the current-driving and addressing circuitry in place, it remains
+only to describe how to detect the presence or absence of a
+core-switching signal on the sense line.  We chose the comparator-based
+circuit described in <a href="#Hilpert">[1]</a> (and apparently of unknown German
+origin):
+<center>
+<img style="padding-bottom: 0.75em" src="sense_circuit.png" width=440 height=229>
+</center>
+The sense line, described above, is threaded once through each of the 32
+cores, and its ends are connected to the lines marked $SA$ and $SB$.
+<p>
+<div class="marginnote">Need to detect positive and negative sense bulges.</div>
+<p>
+The obvious two-fold symmetry of this circuit reflects the possibility
+that a sense pulse from a switching core can bias $SA$ positively or
+negatively relative to $SB$ depending on whether a core is switching
+from a clockwise to an anti-clockwise magnetisation state relative to
+the sense line or vice-versa.
+<p>
+<div class="marginnote">With an input of at least $\pm$20mV, one comparator&rsquo;s
+  output goes high.</div>
+<p>
+The resistors ensure that, when no voltage is present across $SA$/$SB$,
+each comparator&rsquo;s inverting input is 20mV above its non-inverting,
+and so both outputs are low.  If a positive sense pulse occurs, causing
+$SA$ to rise more than 20mV above $SB$, the left comparator will
+detect this and output &lsquo;high&rsquo;.  Conversely for a negative sense pulse,
+the right comparator will fire.  We <span class="textsc">or</span> the two to detect pulses
+of either polarity.  The threshold of 20mV was chosen by experiment.
+<p>
+<div class="marginnote">Capture sense output at the right moment.</div>
+<p>
+<div style="float:right; padding-left:1.5em"><img src="latch-sense-output.png" width=180></div>
+The final detail of the sense circuitry is that we used a timed latch to
+catch and store the output of the <span class="textsc">or</span> gate at the appropriate
+moment.  This ensures that we are not affected by any high comparator
+outputs caused by the transformer-action spikes.  The timer delay was
+chosen by experiment as 650ns, although any value 500&ndash;900ns worked.
+
+<h3><span class="heading-number">4</span> Finished product</h3>
+
+<h4><span class="heading-number">4.1</span> Complete circuit</h4>
+
+Combining these pieces, we arrive at the final circuit, which we give in
+appendix A.  The design splits the shield into a driver
+board and a plug-in core board, as shown in this photograph of the
+two boards plugged into the Arduino:
+<p>
+<center>
+<img src="mounted-shield.jpg" width=540 height=324>
+</center>
+
+<h4><span class="heading-number">4.2</span> Fabrication</h4>
+
+<div class="marginnote">Our design files are available.</div>
+<p>
+We finally achieved our goal of building a core memory shield by having
+our schematics fabricated as PCBs.  Owing to some late design changes,
+we then had to patch the boards slightly; the circuits described here
+include the changes.  Eagle files for these schematics and PCBs as well
+as the Gerber files are
+available <a href="Core-Memory-Shield.zip">here</a>.  Also contained in
+the Eagle files are the part numbers for the various components
+(transistors, logic gates, comparators, etc.) that we used.
+<p>
+
+<h4><span class="heading-number">4.3</span> API and testing</h4>
+
+<div class="marginnote">How to write to and read from the cores from Arduino code.</div>
+<p>
+Once the core board, driver board and Arduino have been appropriately
+mated, it is easy to use the Arduino to read from and write to the core
+memory array.  To send a write pulse to a core, the Arduino writes the
+data bit to digital pin 8, writes the address of
+the core in question to digital pins 3&ndash;7 and then asserts
+<span class="textsc">enable</span> (digital pin 2) for 2us.  Once this is
+done, reading digital pin 9 reveals whether the core changed
+state.  Cycle time is such that a 32-bit operation takes 0.5ms,
+although preliminary experiments suggest that by being more aggressive
+on the timings we could bring this down to 0.3ms.
+<p>
+<div class="marginnote">A simple API and serial-based CLI is available.</div>
+<p>
+These operations are presented as the functions <span class="pre">write_bit</span> and
+<span class="pre">read_bit</span>.  Loops turn these into <span class="pre">write_word</span> and
+<span class="pre">read_word</span>, to act on the whole core board as a single 32-bit
+unsigned integer.  A further natural operation is a <span class="emph">bit exchange</span>.
+This, in one operation, writes a new data bit to a core, and returns the
+old value, which can be deduced as (latched-sense-output) <span class="textsc">xor</span>
+(new-data).  The source-code for this API, with a command-line interface
+presented on the serial port, is available for
+download <a href="Core-Memory-Shield.zip">here</a>.
+<p>
+<div class="marginnote">The core memory shield performed error-free for 10bln
+  operations, running for 100hrs.</div>
+<p>
+We used this interface to extensively test the core memory shield.
+After running continuously for over one hundred hours, the shield had
+performed over ten billion successful bit-exchange operations without
+a single error.
+
+
+
+<h3 style="clear: both"><span class="heading-number">5</span> Final words</h3>
+
+We hope that our work here might encourage others to take an interest in
+both the theory and the practice of core memory.  For further reading,
+excellent descriptions are given by Hilpert <a href="#Hilpert">[1]</a> and by
+Jones <a href="#Jones">[4]</a>.
+<p>
+Building a reliable 32-bit core memory shield for the Arduino proved to
+be a natural stopping point for our work, but there is certainly more
+that could be done.  Some ideas for future work that appealed to us:
+<ul>
+  <li>Many core memory arrays from the heyday of core memory still exist
+  and indeed are easy to find for sale (e.g., on eBay).  It might be a
+  fun challenge to build a driver module to write to and read from these
+  old arrays.  Perhaps with care and luck one could even recover some
+  50-year-old data?
+  <li>A completely different approach to core memory, with a
+  non-destructive read cycle, was invented by Eiichi Goto in the
+  mid-1950s, and was incorporated in the Japanese Parametron Computer 1
+  (see <a href="#Wada">[7]</a> for a description).  It would be very interesting to
+  re-implement this significantly different core memory technology.
+  <li>In practice, a group of core memory modules of the type described
+  here, known as <span class="emph">planes</span>, were combined into a core store.  All planes
+  could be accessed simultaneously by introducing an <span class="emph">inhibit</span>
+  line <a href="#Jones">[4]</a>.  Constructing an 8-bit wide store would be a
+  worthwhile challenge.
+</ul>
+
+
+<h3><span class="heading-number">A</span> Circuits</h3>
+Firstly, the schematic for the driver board:
+<p>
+<img src="driver_32bit_v1_1.png" width=840 height=495>
+<p>
+Secondly, the core board&rsquo;s schematic:
+<p>
+<img src="cores_32bit_v1_1.png" width=540 height=399>
+<p>
+The terminating resistor across the sense loop provides a path for the
+current caused by the induced voltage round the loop.
+
+<h3>References</h3>
+<ol class="references">
+  <li id="Hilpert">B. Hilpert.
+  <a href="http://www.cs.ubc.ca/~hilpert/e/coremem/index.html">
+  Magnetic core memory systems</a>.</li>
+  <li id="Holder">W. Holder.
+  <a href="http://sites.google.com/site/wayneholder/one-bit-ferrite-core-memory">
+  One bit ferrite core memory</a>.</li>
+  <li id="Holme">A. Holme.
+  <a href="http://www.holmea.demon.co.uk/Core/Flipper.htm">
+  Magnetic core memory</a>.</li>
+  <li id="Jones">J.R. Jones.
+  <a href="http://ed-thelen.org/comp-hist/Byte/76jul.html">
+  Coincident current ferrite core memories</a>. <i>Byte</i>, 11:6&ndash;16,
+  July 1976.</li>
+  <li id="arduino-photo">D. Mellis.
+  <a href="http://www.flickr.com/photos/mellis/4784965878/">
+  Photograph of Arduino Duemilanove</a>, CC-BY-2.0.</li>
+  <li id="NorthNashOnline">B. North and O. Nash.
+  <a href="http://www.corememoryshield.com/">
+  Magnetic core memory reborn</a>.</li>
+  <li id="Wada">The Parametron Computer PC-1 and its initial input
+  routine. In P. Rojas and U. Hashagen, editors, <i>The first computers:
+  History and architecture</i>, pages 435&ndash;452. MIT Press, 2000.</li>
+</ol>
+  <div class="footer">
+    <h2><span class="author"><a href="http://www.redfrontdoor.org/">Ben North</a>
+        <a href="mailto:ben@redfrontdoor.org?subject=Core%20memory%20shield">[email]</a></span>
+      and <span class="author"><a href="http://www.olivernash.org/">Oliver Nash</a>
+        <a href="mailto:oliver.nash@gmail.com?subject=Core%20memory%20shield">[email]</a></span></h2>
+    <p class="licence"><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+      &copy; 2011 &mdash; licensed under CC BY-NC-SA 3.0</a></p>
+  </div>
+</body>
+</html>
