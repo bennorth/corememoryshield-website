@@ -147,6 +147,11 @@ table.transistor-eqns
   margin: auto;
 }
 
+table.transistor-eqns tr.spacing > td > div {
+    height: 0.5rem;
+    width: 0rem;
+}
+
 table.transistor-eqns tr td
 {
   width: 35%;
