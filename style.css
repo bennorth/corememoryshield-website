@@ -3,6 +3,7 @@ body {
     font-family: sans-serif, verdana;
     margin: auto;
     width: 90%;
+    line-height: 115%;
 }
 div.header {
     margin-bottom: 1em;
